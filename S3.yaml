@@ -1,5 +1,21 @@
+Parameters:
+  BucketName:
+    Type: String
+    Default: STD21044
 Resources:
   MyS3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: STD21044
+      BucketName: !Ref BucketName
+  MySsmParameter:
+    Type: 'AWS::SSM::Parameter'
+    Properties:
+      Name: /STD21044/arn
+      Type: String
+      Value: !GetAtt MyS3Bucket.Arn
+  MySsmParameter2:
+    Type: 'AWS::SSM::Parameter'
+    Properties:
+      Name: /STD21044/nom
+      Type: String
+      Value: !Ref BucketName
