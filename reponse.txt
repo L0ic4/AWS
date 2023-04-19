@@ -1,1 +1,1 @@
-aws cloudformation create-stack --stack-name ma-pile --template-body file://S3.yaml
+aws cloudformation create-stack --stack-name stack-STD21044 --template-body file://S3.yaml
