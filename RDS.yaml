@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  MyDBInstance:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBName: "mydatabase"
+      Engine: "postgres"
+      EngineVersion: "12.14"
+      DBInstanceClass: "db.t3.micro"
+      MasterUsername: !Sub '{{resolve:ssm:/mydb/username:1}}'
+      MasterUserPassword: !Sub '{{resolve:ssm:/mydb/password:1}}'
+      AllocatedStorage: "5"
+      BackupRetentionPeriod: "7"
+      PubliclyAccessible: true
+      MultiAZ: "false"
+      Tags:
+        - Key: "Name"
+          Value: "mydatabase"
+
+  MyDBUsernameParam:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/mydb/username"
+      Type: "String"
+      Value: "myusername"
+
+  MyDBPasswordParam:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/mydb/password"
+      Type: "SecureString"
+      Value: "mypassword"
+
+Outputs:
+  DatabaseName:
+    Value: !Ref MyDBInstance
+    Description: "Nom de la base de données créée"
+
+  JDBCConnectionString:
+    Value: !Sub "jdbc:postgresql://${MyDBInstance.Endpoint.Address}:${MyDBInstance.Endpoint.Port}/${MyDBInstance.DBName}"
+    Description: "JDBC Connection String pour la base de données créée"
