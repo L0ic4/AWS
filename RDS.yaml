@@ -12,11 +12,6 @@ Resources:
       MasterUserPassword: !Sub '{{resolve:ssm:/mydb/password:1}}'
       AllocatedStorage: "5"
       BackupRetentionPeriod: "7"
-      PubliclyAccessible: true
-      MultiAZ: "false"
-      Tags:
-        - Key: "Name"
-          Value: "mydatabase"
 
   MyDBUsernameParam:
     Type: "AWS::SSM::Parameter"
